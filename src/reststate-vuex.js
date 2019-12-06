@@ -197,10 +197,10 @@ const resourceModule = ({ name: resourceName, httpClient }) => {
         return client
           .all({ options })
           .then(result => {
-            commit('SET_STATUS', STATUS_SUCCESS);
             commit('REPLACE_ALL_RECORDS', result.data);
             commit('STORE_META', result.meta);
             storeIncluded({ commit, dispatch }, result);
+            commit('SET_STATUS', STATUS_SUCCESS);
           })
           .catch(handleError(commit));
       },
@@ -224,13 +224,13 @@ const resourceModule = ({ name: resourceName, httpClient }) => {
         return client
           .where({ filter, options })
           .then(results => {
-            commit('SET_STATUS', STATUS_SUCCESS);
             const matches = results.data;
             const matchedIds = matches.map(record => record.id);
             commit('STORE_RECORDS', matches);
             commit('STORE_FILTERED', { params, matchedIds });
             commit('STORE_META', results.meta);
             storeIncluded({ commit, dispatch }, results);
+            commit('SET_STATUS', STATUS_SUCCESS);
           })
           .catch(handleError(commit));
       },
@@ -240,12 +240,12 @@ const resourceModule = ({ name: resourceName, httpClient }) => {
         return client
           .all({ options })
           .then(response => {
-            commit('SET_STATUS', STATUS_SUCCESS);
             commit('STORE_RECORDS', response.data);
             commit('STORE_PAGE', response.data);
             commit('STORE_META', response.meta);
             commit('SET_LINKS', response.links);
             storeIncluded({ commit, dispatch }, response);
+            commit('SET_STATUS', STATUS_SUCCESS);
           })
           .catch(handleError(commit));
       },
@@ -286,7 +286,6 @@ const resourceModule = ({ name: resourceName, httpClient }) => {
         return client
           .related({ parent, relationship, options })
           .then(results => {
-            commit('SET_STATUS', STATUS_SUCCESS);
             const { id, type } = parent;
             if (Array.isArray(results.data)) {
               const relatedRecords = results.data;
@@ -301,6 +300,7 @@ const resourceModule = ({ name: resourceName, httpClient }) => {
             }
             commit('STORE_META', results.meta);
             storeIncluded({ commit, dispatch }, results);
+            commit('SET_STATUS', STATUS_SUCCESS);
           })
           .catch(handleError(commit));
       },
